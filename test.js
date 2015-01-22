@@ -5,17 +5,7 @@ var movements = {up:false,down:false,right:false,left:false};
 
 var engine = null;
 
-var dropShip = new DropShip();
-dropShip.setMovementsObject(movements);
-// dropShip.helpers.boundingBox = true;
-// dropShip.helpers.bounds = true;
 
-var target = new Transformable(0,0);
-target.scale=0.3;
-target.angularVelocity=5;
-
-var missile = new Missile(200,200,dropShip);
-missile.setDirection(1,1);
 
 $(document).on('ready',function()
 {
@@ -28,11 +18,34 @@ $(document).on('ready',function()
 	img = (new Image()).src = 'img/dropship.png';
 	img = (new Image()).src = 'img/machine_gun.png';
 
+	setTimeout(start,1000);
+
+	
+});
+// ---------------------= =---------------------
+var dropship;
+var target;
+function start()
+{
+	dropShip = new DropShip();
+	dropShip.setMovementsObject(movements);
+
+	target = new Transformable(0,0);
+	target.scale=0.3;
+	target.angularVelocity=5;
+
+	var missile = new Missile(200,200,dropShip);
+	missile.setDirection(1,1);
+
 	engine = getEngine();
 	engine.initialize('game_canvas');
 
 	engine.background = new BasicBackground();
 	engine.addElement(dropShip);
+
+	engine.start();
+
+	setInterval(spawnMissile,2000);
 
 	$(document).on('mousedown',function(ev){engine.mouseDown(ev);});
 	$(document).on('mouseup',function(ev){engine.mouseUp(ev);});
@@ -41,12 +54,7 @@ $(document).on('ready',function()
 	$(document).on('keydown', keyDown);
 	$(document).on('keyup', keyUp);
 
-	engine.start();
-
-	setInterval(spawnMissile,2000);
-
-    return;
-});
+}
 // ---------------------= =---------------------
 function keyDown(ev)
 {
